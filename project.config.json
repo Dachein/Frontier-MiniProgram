@@ -1,0 +1,20 @@
+{
+  "miniprogramRoot": "miniprogram/",
+  "projectname": "metaAlpha-mini",
+  "description": "metaAlpha WeChat Mini Program",
+  "appid": "",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": false,
+    "minified": false
+  },
+  "packNpmManually": true,
+  "packNpmRelationList": [
+    {
+      "packageJsonPath": "./miniprogram/package.json",
+      "miniprogramNpmDistDir": "./miniprogram/"
+    }
+  ]
+}

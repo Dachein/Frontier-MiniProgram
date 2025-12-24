@@ -1,0 +1,77 @@
+<view class="container safe-area-bottom">
+  <!-- 1. Header Area -->
+  <view class="pd-header" wx:if="{{piece}}">
+    <!-- 标题占据顶层整行 -->
+    <view class="pd-title">{{title}}</view>
+
+    <!-- Icon 与 Meta 信息（作者、日期）组合在一起 -->
+    <view class="pd-meta-section">
+      <view class="pd-badge-container">
+        <view class="pd-badge-square pd-badge-{{badgeType || 'DEFAULT'}}">
+          <text class="pd-badge-text mono">{{badge}}</text>
+        </view>
+      </view>
+      
+      <view class="pd-meta-content">
+        <view class="pd-meta-line1 mono">
+          <text class="pd-meta-label">BY</text>
+          <text class="pd-meta-source">{{source}}</text>
+          <block wx:if="{{author}}">
+            <text class="pd-meta-divider">|</text>
+            <text class="pd-meta-author">{{author}}</text>
+          </block>
+          <text class="pd-meta-arrow">></text>
+        </view>
+        <view class="pd-meta-time mono">{{timeText}}</view>
+      </view>
+    </view>
+
+    <view class="pd-tags" wx:if="{{tags && tags.length > 0}}">
+      <text class="pd-tag" wx:for="{{tags}}" wx:key="index">#{{item.name || item}}</text>
+    </view>
+  </view>
+
+  <!-- Loading State -->
+  <view wx:if="{{!piece}}" class="loading-state">
+    <view class="mono label-mono">LOADING...</view>
+  </view>
+
+  <!-- 2. Takeaway Cards List (Streaming + Markdown) -->
+  <view class="takeaway-list" wx:if="{{hasTakeaways || streaming}}">
+    <view class="mono label-mono section-title">AI BRIEF</view>
+    
+    <block wx:for="{{takeaways}}" wx:key="index">
+      <view class="card takeaway-card">
+        <!-- Question / Title -->
+        <view class="card-header">
+          <text class="mono index-num">{{index + 1}}.</text>
+          <text class="card-title">{{item.question}}</text>
+        </view>
+        
+        <!-- Answer / Markdown Content -->
+        <view class="card-content">
+          <mp-html 
+            content="{{item.answerHtml || '...'}}" 
+            copy-link="{{true}}"
+            selectable="{{true}}"
+            tag-style="{{markdownStyle}}"
+          />
+        </view>
+      </view>
+    </block>
+    
+    <!-- Streaming Indicator -->
+    <view wx:if="{{streaming}}" class="streaming-footer">
+      <view class="dot-pulse"></view>
+      <text class="mono">Generating...</text>
+    </view>
+    
+    <!-- Test Action -->
+    <view class="footer-actions" wx:if="{{hasTakeaways && !streaming}}">
+      <button class="btn-regenerate" bindtap="handleRegenerate">Regenerate</button>
+    </view>
+  </view>
+
+  <!-- Error State -->
+  <view wx:if="{{error}}" class="pd-error">{{error}}</view>
+</view>

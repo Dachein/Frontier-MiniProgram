@@ -1,0 +1,25 @@
+<view class="container">
+  <view style="padding: 12rpx 0 16rpx 0;">
+    <view class="ui-title">Add</view>
+    <view class="ui-subtitle">URL / PDF</view>
+  </view>
+
+  <view class="surface">
+    <view class="section">
+      <view class="mono label-mono" style="margin-bottom:12rpx;">URL</view>
+      <input class="input" placeholder="https://... 或 mp.weixin.qq.com/..." placeholder-class="input-placeholder" value="{{url}}" bindinput="onUrlInput" />
+      <view style="height:16rpx;"></view>
+      <button class="btn" loading="{{submittingUrl}}" bindtap="submitUrl">Create from URL</button>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="section">
+      <view class="mono label-mono" style="margin-bottom:12rpx;">PDF</view>
+      <button class="btn-outline" bindtap="choosePdf">Choose PDF</button>
+      <view style="height:12rpx;"></view>
+      <button class="btn" loading="{{uploadingPdf}}" bindtap="uploadPdf" disabled="{{!pdfPath}}">Upload & Create</button>
+      <view wx:if="pdfName" class="mono" style="margin-top:12rpx; font-size:22rpx; color:#4b5563;">Selected: {{pdfName}}</view>
+    </view>
+  </view>
+</view>

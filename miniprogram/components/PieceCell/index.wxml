@@ -1,0 +1,29 @@
+<view class="pc {{item.isActive ? 'pc-active' : ''}}" bindtap="onTap">
+  <view class="pc-left">
+    <!-- Icon/Avatar: Rounded Square (iOS Style) -->
+    <!-- Type-specific styling handled by CSS classes -->
+    <view class="pc-avatar pc-avatar-{{item.badgeType || 'DEFAULT'}} {{item.isActive ? 'pc-avatar-hl' : ''}}">
+      <text class="pc-avatar-text mono">{{item.badge}}</text>
+    </view>
+  </view>
+
+  <view class="pc-mid">
+    <!-- Title: Medium weight, tight layout -->
+    <view class="pc-title {{item.isActive ? 'pc-title-hl' : ''}}">{{item.title}}</view>
+    
+    <!-- Meta: Source | Time -->
+    <view class="pc-meta mono">
+      <text class="pc-meta-source">{{item.source}}</text>
+      <text class="pc-meta-divider">|</text>
+      <text class="pc-meta-time">{{item.timeText}}</text>
+    </view>
+  </view>
+
+  <!-- Right: Status (Sparkles) -->
+  <view class="pc-right" wx:if="{{item.takeawayCount > 0}}">
+    <view class="pc-chip">
+      <view class="pc-chip-icon">✨</view> 
+      <text class="pc-chip-count mono">{{item.takeawayCount}}</text>
+    </view>
+  </view>
+</view>

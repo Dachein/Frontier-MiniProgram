@@ -1,0 +1,123 @@
+page {
+  /* ========================================================================
+     Frontier Design System (Sync with iOS Theme.swift)
+     ======================================================================== */
+
+  /* 1. Palette (基础色板) */
+  --p-amber-luminous: #F19928;
+  --p-amber-bright:   #FFB84D;
+  --p-orange-burnt:   #EA580C;
+  --p-orange-clay:    #C2410C;
+  --p-blue-electric:  #60ABF6;
+  --p-blue-link:      #007ACC;
+  --p-ink-black:      #111111;
+  --p-pure-white:     #F2F2F7;
+  --p-paper-white:    #FFFFFF;
+  --p-paper-warm:     #F5F5F7;
+  --p-pure-black:     #000000;
+  --p-gray-std:       #4B5563;
+  --p-gray-cool:      #A0A0A0;
+  --p-gray-light:     #E5E7EB;
+  --p-gray-dark:      #1C1C1E;
+
+  /* 2. UI Layer (语义层) */
+  --ui-bg:         var(--p-paper-warm);
+  --ui-bg-subtle:  var(--p-paper-white);
+  --ui-primary:    var(--p-ink-black);
+  --ui-secondary:  var(--p-gray-std);
+  --ui-action:     var(--p-orange-burnt); 
+  --ui-border:     var(--p-gray-light);
+
+  /* 3. Content Layer (Markdown/内容专用) */
+  --content-text:    #333333;
+  --content-bold:    var(--ui-action);
+  --content-code-bg: var(--p-gray-light);
+  --content-bullet:  var(--ui-action);
+  --content-link:    var(--p-blue-link);
+
+  /* 4. Typography (排版 Token 化) */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  
+  /* Font Sizes - iOS Scale */
+  --fs-title:    40rpx; /* Headline */
+  --fs-body:     32rpx; /* Body */
+  --fs-card:     28rpx; /* Callout/Subheadline (比 Body 小一号) */
+  --fs-caption:  24rpx; /* Footnote */
+  --fs-label:    20rpx; /* Caption */
+  
+  /* Line Heights */
+  --lh-std:      1.6;
+  --lh-tight:    1.4;
+  --lh-loose:    1.8;
+
+  /* Font Weights */
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-bold:    700;
+
+  /* 5. Spacing System */
+  --space-xs:    8rpx;
+  --space-sm:    12rpx;
+  --space-md:    16rpx;
+  --space-lg:    24rpx;
+  --space-xl:    32rpx;
+
+  /* 6. Radius */
+  --radius-sm: 8rpx;
+  --radius-md: 20rpx;
+  --radius-lg: 32rpx;
+
+  /* Global Reset */
+  background: var(--ui-bg);
+  color: var(--ui-primary);
+  font-family: var(--font-sans);
+  box-sizing: border-box;
+}
+
+/* Dark Mode Adaptation */
+@media (prefers-color-scheme: dark) {
+  page {
+    --ui-bg:         var(--p-pure-black);
+    --ui-bg-subtle:  var(--p-gray-dark);
+    --ui-primary:    var(--p-pure-white);
+    --ui-secondary:  var(--p-gray-cool);
+    --ui-action:     var(--p-amber-luminous); 
+    --ui-border:     #2C2C2E;
+
+    --content-text:    #D1D1D6;
+    --content-bold:    var(--ui-action);
+    --content-code-bg: #2C2C2E;
+    --content-bullet:  var(--ui-action);
+    --content-link:    var(--p-blue-electric);
+
+    --data-signal:   var(--p-amber-luminous);
+    --data-secondary: var(--p-gray-cool);
+  }
+}
+
+/* ========================================================================
+   Utility Classes
+   ======================================================================== */
+
+.container {
+  padding: var(--space-xl);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.label-mono {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  letter-spacing: 2rpx;
+  color: var(--data-secondary);
+}
+
+.pd-error {
+  margin-top: var(--space-xl);
+  color: #FF3B30;
+  text-align: center;
+  font-size: var(--fs-caption);
+}

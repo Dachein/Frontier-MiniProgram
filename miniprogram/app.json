@@ -1,0 +1,16 @@
+{
+  "darkmode": true,
+  "pages": [
+    "pages/explore/index",
+    "pages/login/index",
+    "pages/library/index",
+    "pages/add/index",
+    "pages/piece/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "metaAlpha",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#ffffff"
+  }
+}

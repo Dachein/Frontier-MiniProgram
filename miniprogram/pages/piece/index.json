@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "mp-html": "mp-html"
+  },
+  "navigationBarTitleText": "Piece",
+  "enablePullDownRefresh": true,
+  "disableSwipeBack": false
+}

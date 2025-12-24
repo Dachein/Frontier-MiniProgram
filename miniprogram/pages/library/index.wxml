@@ -1,0 +1,8 @@
+<view class="container">
+  <view class="surface surface-flat">
+    <view class="section">
+      <view class="mono label-mono">REDIRECTING...</view>
+      <view class="ui-subtitle" style="margin-top: 10rpx;">Home 现在是 Public/My 双列表，这里只是兼容入口。</view>
+    </view>
+  </view>
+</view>

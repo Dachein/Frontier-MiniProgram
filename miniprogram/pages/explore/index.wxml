@@ -1,0 +1,164 @@
+<view class="container">
+  <!-- Header: Minimal (No title as requested) -->
+  <view class="home-header">
+    <view class="ui-subtitle mono">{{tab === 'today' ? 'TODAY SIGNALS' : 'MY ARSENAL'}}</view>
+  </view>
+
+  <!-- Segmented Tabs -->
+  <view class="segmented" role="tablist">
+    <view
+      class="segmented-item {{tab === 'today' ? 'segmented-item-active' : ''}}"
+      bindtap="onTabTap"
+      data-tab="today"
+    >
+      Today
+    </view>
+    <view
+      class="segmented-item {{tab === 'my' ? 'segmented-item-active' : ''}}"
+      bindtap="onTabTap"
+      data-tab="my"
+    >
+      我的
+    </view>
+  </view>
+
+  <!-- Swiper for lists -->
+  <swiper
+    class="home-swiper"
+    current="{{tabIndex}}"
+    bindchange="onSwiperChange"
+    duration="300"
+  >
+    <!-- Today Tab -->
+    <swiper-item>
+      <scroll-view
+        scroll-y
+        class="tab-scroll"
+        refresher-enabled="{{true}}"
+        refresher-triggered="{{todayRefreshing}}"
+        bindrefresherrefresh="onTodayRefresh"
+      >
+        <view wx:if="{{todayLoading && todayItems.length === 0}}" class="loading-box">
+          <view class="mono label-mono">LOADING...</view>
+        </view>
+
+        <view class="surface surface-flat" wx:if="{{todayItems.length > 0}}">
+          <view wx:for="{{todayItems}}" wx:key="id" class="list-row">
+            <piece-cell item="{{item}}" bind:select="onSelectPiece" />
+            <view class="divider"></view>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+
+    <!-- My Tab -->
+    <swiper-item>
+      <scroll-view
+        scroll-y
+        class="tab-scroll"
+        refresher-enabled="{{true}}"
+        refresher-triggered="{{myRefreshing}}"
+        bindrefresherrefresh="onMyRefresh"
+      >
+        <view wx:if="{{!isAuthed}}" class="login-prompt">
+          <view class="surface surface-flat">
+            <view class="section">
+              <view class="mono label-mono">LOGIN REQUIRED</view>
+              <view class="ui-subtitle" style="margin-top: 10rpx;">你的 My Library 需要登录才能查看。</view>
+              <view style="height: 18rpx;"></view>
+              <button class="btn" bindtap="goLogin">Login</button>
+            </view>
+          </view>
+        </view>
+
+        <view wx:elif="{{myLoading && myItems.length === 0}}" class="loading-box">
+          <view class="mono label-mono">LOADING...</view>
+        </view>
+
+        <view class="surface surface-flat" wx:else>
+          <view wx:if="{{myItems.length === 0 && !myLoading}}" class="empty-box">
+            <view class="section">
+              <view class="mono label-mono">NO SIGNALS</view>
+              <view class="ui-subtitle" style="margin-top: 10rpx;">加一篇内容，开始你的 flow。</view>
+            </view>
+          </view>
+
+          <view wx:for="{{myItems}}" wx:key="id" class="list-row">
+            <piece-cell item="{{item}}" bind:select="onSelectPiece" />
+            <view class="divider"></view>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+  </swiper>
+
+  <!-- Floating Add Button -->
+  <view class="fab" bindtap="onFabAdd" aria-label="Add">
+    <view class="fab-inner">
+      <text class="fab-plus">+</text>
+    </view>
+  </view>
+
+  <!-- Add New Piece Drawer -->
+  <page-container
+    show="{{showAddDrawer}}"
+    round="{{true}}"
+    overlay="{{true}}"
+    position="bottom"
+    close-on-slide-down="{{true}}"
+    bindenter="onDrawerEnter"
+    bindleave="onDrawerLeave"
+    custom-style="z-index: 999;"
+  >
+    <view class="add-drawer">
+      <view class="drawer-header">
+        <view class="mono label-mono">ADD NEW</view>
+        <view class="drawer-close" bindtap="onCloseDrawer">×</view>
+      </view>
+
+      <view class="drawer-body">
+        <!-- 1. URL Section -->
+        <view class="drawer-section">
+          <view class="section-label mono">WEB LINK</view>
+          <view class="url-input-wrap">
+            <input
+              class="drawer-input"
+              placeholder="Paste link here..."
+              placeholder-class="input-placeholder"
+              value="{{url}}"
+              bindinput="onUrlInput"
+            />
+            <button
+              class="btn-mini {{url ? 'btn-active' : ''}}"
+              loading="{{submittingUrl}}"
+              bindtap="submitUrl"
+              disabled="{{!url}}"
+            >
+              GO
+            </button>
+          </view>
+        </view>
+
+        <view class="drawer-divider">OR</view>
+
+        <!-- 2. PDF Section -->
+        <view class="drawer-section">
+          <view class="section-label mono">PDF DOCUMENT</view>
+          <view class="pdf-upload-box {{pdfPath ? 'pdf-selected' : ''}}" bindtap="choosePdf">
+            <view class="pdf-icon">📄</view>
+            <view class="pdf-info">
+              <view class="pdf-name">{{pdfName || 'Select PDF from WeChat'}}</view>
+              <view class="pdf-hint" wx:if="{{!pdfPath}}">Tap to browse files</view>
+            </view>
+            <view class="pdf-action" wx:if="{{pdfPath}}" catchtap="uploadPdf">
+              <button class="btn-mini btn-active" loading="{{uploadingPdf}}">UPLOAD</button>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- Safe area for bottom -->
+      <view class="safe-area-bottom"></view>
+    </view>
+  </page-container>
+</view>

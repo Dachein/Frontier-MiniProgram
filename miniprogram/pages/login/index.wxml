@@ -1,0 +1,33 @@
+<view class="container">
+  <view style="padding: 12rpx 0 8rpx 0;">
+    <view class="ui-title">Login</view>
+    <view class="ui-subtitle">邮箱密码登录 / 微信一键登录</view>
+  </view>
+
+  <view class="surface surface-flat">
+    <view class="section">
+      <view class="mono label-mono" style="margin-bottom:12rpx;">EMAIL</view>
+      <input class="input" placeholder="you@example.com" placeholder-class="input-placeholder" value="{{email}}" bindinput="onEmail" />
+
+      <view style="height:16rpx;"></view>
+      <view class="mono label-mono" style="margin-bottom:12rpx;">PASSWORD</view>
+      <input class="input" placeholder="password" placeholder-class="input-placeholder" password="true" value="{{password}}" bindinput="onPassword" />
+
+      <view style="height:16rpx;"></view>
+      <button class="btn" loading="{{loadingEmail}}" bindtap="loginEmail">Login with Email</button>
+      <view style="height:12rpx;"></view>
+      <button class="btn-outline" loading="{{loadingSignup}}" bindtap="signupEmail">Create Account</button>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="section">
+      <view class="mono label-mono" style="margin-bottom:12rpx;">WECHAT</view>
+      <button class="btn" loading="{{loadingWeChat}}" bindtap="loginWeChat">One-tap WeChat Login</button>
+    </view>
+  </view>
+
+  <view wx:if="{{error}}" style="margin-top: 16rpx;">
+    <view style="color:#ef4444;">{{error}}</view>
+  </view>
+</view>

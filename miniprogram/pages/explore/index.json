@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "Library",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "piece-cell": "/components/PieceCell/index"
+  }
+}
+
+
+
