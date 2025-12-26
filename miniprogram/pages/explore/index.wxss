@@ -2,57 +2,97 @@ page {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Prevent body scroll */
+  overflow: hidden;
 }
 
 .container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 24rpx;
+  padding: 0 32rpx;
   box-sizing: border-box;
+  background-color: var(--ui-bg);
 }
 
-.home-header {
+/* ========================================================================
+   Header V2: 标题与切换滑块
+   ======================================================================== */
+
+.header-v2 {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
   align-items: flex-end;
-  padding: 0 0 12rpx 0;
+  justify-content: space-between;
+  padding: calc(180rpx + env(safe-area-inset-top)) 0 48rpx 0; /* 保持大间距，确保顶部绝对留空 */
   flex-shrink: 0;
+  width: 100%;
 }
 
-.segmented {
+.page-title {
+  font-size: 72rpx; /* 标题更粗犷一点 */
+  font-weight: 800;
+  color: var(--ui-primary);
+  letter-spacing: -2rpx;
+  line-height: 1;
+}
+
+.header-right.tabs {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8rpx;
-  padding: 10rpx;
-  border: 2rpx solid #e5e7eb; /* UI.border */
-  border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.5);
-  margin: 8rpx 0 18rpx 0;
-  flex-shrink: 0;
+  gap: 16rpx;
+  margin-bottom: 12rpx; /* 稍微向上提一点，对齐大标题的视觉中心 */
 }
 
-.segmented-item {
-  flex: 1;
-  text-align: center;
-  height: 64rpx;
-  line-height: 64rpx;
-  border-radius: 18rpx;
-  font-size: 26rpx;
+/* Tab Pill: 灵动独立按钮 */
+.tab-pill {
+  height: 64rpx; /* 稍微增加高度 */
+  min-width: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 32rpx;
+  background: rgba(0, 0, 0, 0.05); /* 浅色模式非激活 */
+  color: #8E8E93;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tab-pill {
+    background: #2C2C2E; /* 深色模式非激活 */
+  }
+}
+
+/* Active State: 黑白反转逻辑 */
+.tab-pill.active {
+  min-width: 150rpx; /* 稍微增加宽度 */
+  padding: 0 28rpx;
+}
+
+/* 浅色模式激活：黑底白字 */
+@media (prefers-color-scheme: light) {
+  .tab-pill.active {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+  }
+}
+
+/* 深色模式激活：白底黑字 */
+@media (prefers-color-scheme: dark) {
+  .tab-pill.active {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+}
+
+.tab-text {
+  font-size: 24rpx; /* 增加文字字号 */
   font-weight: 700;
-  color: #4b5563; /* UI.secondary */
-  transition: all 0.2s ease;
 }
 
-.segmented-item-active {
-  color: #111111; /* UI.primary */
-  background: #ffffff;
-  border: 2rpx solid #e5e7eb;
-}
-
-/* Swiper height */
+/* Swiper Content */
 .home-swiper {
   flex: 1;
   width: 100%;
@@ -62,20 +102,26 @@ page {
   height: 100%;
 }
 
+.divider {
+  height: 1rpx;
+  background: var(--ui-border);
+  opacity: 0.2;
+  margin-left: 72rpx; /* 对齐 52rpx Icon + 20rpx 间距 */
+}
+
 .list-row:last-child .divider {
   display: none;
 }
 
-.loading-box,
-.empty-box,
-.login-prompt {
-  padding: 24rpx 0;
+.loading-box, .empty-box {
+  padding: 40rpx 0;
 }
 
+/* FAB */
 .fab {
   position: fixed;
-  right: 28rpx;
-  bottom: calc(36rpx + env(safe-area-inset-bottom));
+  right: 32rpx;
+  bottom: calc(48rpx + env(safe-area-inset-bottom));
   width: 112rpx;
   height: 112rpx;
   z-index: 999;
@@ -85,7 +131,7 @@ page {
   width: 112rpx;
   height: 112rpx;
   border-radius: 56rpx;
-  background: #ea580c; /* UI.action */
+  background: #EA580C;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,179 +144,4 @@ page {
   color: #000000;
   line-height: 56rpx;
   margin-top: -6rpx;
-}
-
-@media (prefers-color-scheme: dark) {
-  .segmented {
-    border-color: #1f2937;
-    background: rgba(0, 0, 0, 0.35);
-  }
-
-  .segmented-item {
-    color: #9ca3af;
-  }
-
-  .segmented-item-active {
-    color: #ffffff;
-    background: #111111;
-    border-color: #1f2937;
-  }
-
-  .fab-inner {
-    background: #ff9f1c;
-    box-shadow: 0 16rpx 36rpx rgba(255, 159, 28, 0.28);
-  }
-}
-
-/* ========================================================================
-   Add New Piece Drawer
-   ======================================================================== */
-
-.add-drawer {
-  background: var(--ui-bg-subtle);
-  padding: 40rpx;
-  border-radius: 40rpx 40rpx 0 0;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.drawer-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 48rpx;
-}
-
-.drawer-close {
-  font-size: 48rpx;
-  font-weight: 300;
-  color: var(--ui-secondary);
-  padding: 10rpx;
-  margin-right: -10rpx;
-}
-
-.drawer-body {
-  display: flex;
-  flex-direction: column;
-  gap: 40rpx;
-}
-
-.drawer-section {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-}
-
-.section-label {
-  font-size: 20rpx;
-  color: var(--ui-secondary);
-  font-weight: 700;
-  letter-spacing: 2rpx;
-}
-
-/* URL Input Styling */
-.url-input-wrap {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background: var(--ui-bg);
-  border-radius: 20rpx;
-  padding: 12rpx 12rpx 12rpx 24rpx;
-  border: 2rpx solid var(--ui-border);
-}
-
-.drawer-input {
-  flex: 1;
-  font-size: 28rpx;
-  color: var(--ui-primary);
-  height: 60rpx;
-}
-
-.input-placeholder {
-  color: var(--ui-secondary);
-  opacity: 0.5;
-}
-
-.btn-mini {
-  background: var(--ui-border);
-  color: var(--ui-secondary);
-  font-size: 20rpx;
-  font-weight: 800;
-  padding: 16rpx 24rpx;
-  line-height: 1;
-  border-radius: 12rpx;
-  margin: 0;
-  min-height: auto;
-  width: auto !important;
-}
-
-.btn-active {
-  background: var(--ui-action);
-  color: #000000;
-}
-
-.drawer-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18rpx;
-  font-weight: 800;
-  color: var(--ui-border);
-  gap: 20rpx;
-  padding: 10rpx 0;
-}
-
-.drawer-divider::before,
-.drawer-divider::after {
-  content: "";
-  flex: 1;
-  height: 2rpx;
-  background: var(--ui-border);
-}
-
-/* PDF Box Styling */
-.pdf-upload-box {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background: var(--ui-bg);
-  border: 2rpx dashed var(--ui-border);
-  border-radius: 24rpx;
-  padding: 32rpx;
-  gap: 24rpx;
-  transition: all 0.2s ease;
-}
-
-.pdf-selected {
-  border-style: solid;
-  border-color: var(--ui-action);
-}
-
-.pdf-icon {
-  font-size: 48rpx;
-}
-
-.pdf-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.pdf-name {
-  font-size: 26rpx;
-  font-weight: 600;
-  color: var(--ui-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.pdf-hint {
-  font-size: 22rpx;
-  color: var(--ui-secondary);
-  margin-top: 4rpx;
-}
-
-.safe-area-bottom {
-  height: env(safe-area-inset-bottom);
-  margin-top: 20rpx;
 }

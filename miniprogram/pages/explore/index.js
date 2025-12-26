@@ -20,6 +20,12 @@ Page({
     pdfPath: '',
     pdfName: '',
     uploadingPdf: false,
+
+    // Context Menu State
+    showMenu: false,
+    menuTitle: '',
+    menuItems: [],
+    selectedItem: null,
   },
 
   onLoad(query) {
@@ -114,6 +120,118 @@ Page({
     const id = e?.detail?.id
     if (!id) return
     wx.navigateTo({ url: `/pages/piece/index?id=${encodeURIComponent(id)}` })
+  },
+
+  /**
+   * 长按唤起菜单
+   */
+  onShowMenu(e) {
+    const { item } = e.detail
+    const isPinned = !!item.isPinned
+    
+    let menuItems = []
+    if (!isPinned) {
+      menuItems = [
+        { id: 'pin', label: 'Pin to Arsenal', icon: 'bookmark' },
+        { id: 'copy', label: 'Copy Link', icon: 'link' },
+        { id: 'share', label: 'Forward to Group', icon: 'share', openType: 'share' },
+        { id: 'save-image', label: 'Save Share Image', icon: 'image' }
+      ]
+    } else {
+      menuItems = [
+        { id: 'unpin', label: 'Unpin from Arsenal', icon: 'trash', danger: true },
+        { id: 'copy', label: 'Copy Link', icon: 'link' },
+        { id: 'share', label: 'Forward to Group', icon: 'share', openType: 'share' },
+        { id: 'save-image', label: 'Save Share Image', icon: 'image' }
+      ]
+    }
+
+    this.setData({
+      showMenu: true,
+      menuTitle: item.title,
+      menuItems,
+      selectedItem: item
+    })
+  },
+
+  onCloseMenu() {
+    this.setData({ showMenu: false })
+  },
+
+  async onMenuAction(e) {
+    const { id } = e.detail
+    const item = this.data.selectedItem
+    this.setData({ showMenu: false })
+
+    if (!item) return
+
+    switch (id) {
+      case 'pin':
+        try {
+          wx.showLoading({ title: 'Pinning...', mask: true })
+          await PieceService.pin(item.id)
+          
+          // 本地状态更新
+          const updateItem = (list) => list.map(i => i.id === item.id ? { ...i, isPinned: true } : i)
+          this.setData({
+            todayItems: updateItem(this.data.todayItems),
+            myItems: this.data.tab === 'my' ? updateItem(this.data.myItems) : this.data.myItems
+          })
+          
+          wx.showToast({ title: 'Pinned!', icon: 'success' })
+        } catch (err) {
+          wx.showToast({ title: err.message || 'Pin failed', icon: 'none' })
+        } finally {
+          wx.hideLoading()
+        }
+        break
+      case 'unpin':
+        try {
+          wx.showLoading({ title: 'Removing...', mask: true })
+          await PieceService.unpin(item.id)
+          
+          // 本地状态更新
+          const updateItem = (list) => list.map(i => i.id === item.id ? { ...i, isPinned: false } : i)
+          this.setData({
+            todayItems: updateItem(this.data.todayItems),
+            myItems: this.data.myItems.filter(i => i.id !== item.id)
+          })
+          
+          wx.showToast({ title: 'Unpinned', icon: 'none' })
+        } catch (err) {
+          wx.showToast({ title: err.message || 'Unpin failed', icon: 'none' })
+        } finally {
+          wx.hideLoading()
+        }
+        break
+      case 'copy':
+        wx.setClipboardData({
+          data: item.sourceUrl || item.title,
+          success: () => wx.showToast({ title: 'Link Copied' })
+        })
+        break
+      case 'share':
+        // logic moved to onShareAppMessage for 'share' button
+        break
+      case 'save-image':
+        if (!item) return
+        wx.showLoading({ title: 'Generating...', mask: true })
+        try {
+          const resp = await request('GET', `/pieces/${item.id}/share-image`)
+          if (!resp || !resp.success || !resp.image_url) {
+            throw new Error(resp?.error || 'Failed to generate image')
+          }
+          wx.previewImage({
+            urls: [resp.image_url],
+            current: resp.image_url
+          })
+        } catch (e) {
+          wx.showToast({ title: e.message || 'Error', icon: 'none' })
+        } finally {
+          wx.hideLoading()
+        }
+        break
+    }
   },
 
   goLogin() {
@@ -234,4 +352,24 @@ Page({
       this.setData({ uploadingPdf: false })
     }
   },
+
+  /**
+   * 转发给朋友/群聊
+   */
+  onShareAppMessage(res) {
+    const item = this.data.selectedItem
+    if (res.from === 'button' && item) {
+      // 从上下文菜单点击分享
+      this.setData({ showMenu: false })
+      return {
+        title: item.title || 'metaAlpha Signal',
+        path: `/pages/piece/index?id=${encodeURIComponent(item.id)}`
+      }
+    }
+    // 默认分享当前 Explore 页面
+    return {
+      title: 'metaAlpha - Discover Hardcore Signals',
+      path: '/pages/explore/index'
+    }
+  }
 })

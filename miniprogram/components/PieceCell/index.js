@@ -13,6 +13,13 @@ Component({
       if (!id) return
       this.triggerEvent('select', { id })
     },
+
+    onLongPress() {
+      const it = this.data.item || {}
+      // 触发震动反馈
+      wx.vibrateShort({ type: 'medium' })
+      this.triggerEvent('contextmenu', { item: it })
+    }
   },
 })
 

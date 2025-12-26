@@ -32,6 +32,24 @@ const PieceService = {
   },
 
   /**
+   * Pin piece to library
+   */
+  async pin(id) {
+    const resp = await request('POST', `/pieces/${id}/pin`)
+    if (!resp || !resp.success) throw new Error(resp?.error || 'pin failed')
+    return true
+  },
+
+  /**
+   * Unpin piece from library
+   */
+  async unpin(id) {
+    const resp = await request('DELETE', `/pieces/${id}/pin`)
+    if (!resp || !resp.success) throw new Error(resp?.error || 'unpin failed')
+    return true
+  },
+
+  /**
    * Start extraction stream (WebSocket)
    */
   startExtractStream(pieceId) {
@@ -62,6 +80,7 @@ const PieceService = {
       timeText: this._formatTickerTime(addedAt),
       takeawayCount: p.takeaway_count || takeaways.length,
       isActive,
+      isPinned: !!it.is_pinned,
     }
   },
 

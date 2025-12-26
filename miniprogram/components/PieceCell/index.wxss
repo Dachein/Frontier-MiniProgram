@@ -1,37 +1,25 @@
-/* components/PieceCell/index.wxss */
-
 .pc {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 20rpx 24rpx; /* Compact vertical padding */
+  padding: 20rpx 0; /* 绝对锁定最紧凑间距 */
   background: transparent;
-  transition: background 0.2s ease;
 }
 
-/* Active State Background (Subtle Tint) */
 .pc-active {
-  background: rgba(255, 255, 255, 0.6); /* Fallback */
-  background: var(--ui-bg-subtle-active, rgba(255, 255, 255, 0.6)); 
-}
-@media (prefers-color-scheme: dark) {
-  .pc-active {
-    background: rgba(255, 255, 255, 0.1);
-  }
+  opacity: 0.6;
 }
 
-/* Left Column: Avatar */
 .pc-left {
-  width: 72rpx; /* 增加宽度：56rpx -> 72rpx */
-  padding-top: 6rpx;
+  width: 52rpx; /* 强制锁定 52rpx 原始尺寸 */
+  padding-top: 8rpx;
   margin-right: 20rpx;
 }
 
-/* Avatar: Rounded Square (Larger Size) */
 .pc-avatar {
-  width: 64rpx;  /* 增加尺寸：52rpx -> 64rpx */
-  height: 64rpx; /* 增加尺寸：52rpx -> 64rpx */
-  border-radius: 12rpx; /* 圆角也同步微调 */
+  width: 52rpx;  
+  height: 52rpx;
+  border-radius: 12rpx; /* 强制锁定 12rpx 原始圆角 */
   background: transparent;
   border: 2rpx solid var(--ui-border);
   display: flex;
@@ -40,112 +28,61 @@
   box-sizing: border-box;
 }
 
-/* Avatar Text (Badge) - Bigger and bolder */
 .pc-avatar-text {
-  font-size: 20rpx; /* 随着框变大，文字也稍微大一点点 */
+  font-size: 18rpx;
   font-weight: 700;
-  letter-spacing: 0.5rpx;
 }
 
-/* ========================================================================
-   Type Specific Colors (Pixel-perfect Color Coding)
-   ======================================================================== */
-
-/* PDF - Red */
+/* 恢复最初的硬核颜色编码 */
 .pc-avatar-PDF { border-color: #ef4444; }
 .pc-avatar-PDF .pc-avatar-text { color: #ef4444; }
-
-/* YTB - Red (Same as PDF or slightly darker?) */
 .pc-avatar-YTB { border-color: #f87171; }
 .pc-avatar-YTB .pc-avatar-text { color: #f87171; }
-
-/* WX - Green */
 .pc-avatar-WX { border-color: #10b981; }
 .pc-avatar-WX .pc-avatar-text { color: #10b981; }
-
-/* LNK/URL - Blue */
 .pc-avatar-DEFAULT { border-color: #3b82f6; }
 .pc-avatar-DEFAULT .pc-avatar-text { color: #3b82f6; }
 
-/* Dark Mode Overrides for Icons (Higher brightness) */
-@media (prefers-color-scheme: dark) {
-  .pc-avatar-PDF { border-color: #f87171; }
-  .pc-avatar-PDF .pc-avatar-text { color: #f87171; }
-  
-  .pc-avatar-YTB { border-color: #fb7185; }
-  .pc-avatar-YTB .pc-avatar-text { color: #fb7185; }
-
-  .pc-avatar-WX { border-color: #34d399; }
-  .pc-avatar-WX .pc-avatar-text { color: #34d399; }
-
-  .pc-avatar-DEFAULT { border-color: #60a5fa; }
-  .pc-avatar-DEFAULT .pc-avatar-text { color: #60a5fa; }
-}
-
-/* Active Avatar Highlight (If needed in future) */
-.pc-avatar-hl {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-/* Mid Column: Content */
 .pc-mid {
   flex: 1;
-  min-width: 0; /* Enable truncation */
-  padding-right: 16rpx;
+  min-width: 0;
 }
 
-/* Title */
 .pc-title {
-  font-size: 28rpx; /* 14pt */
-  font-weight: var(--fw-regular, 400); /* 关键改动：默认 Regular (400) */
-  color: var(--ui-secondary); /* Default: Secondary (Inactive) */
-  line-height: 38rpx;
+  font-size: 28rpx; /* 严格对齐图 2 字体 */
+  font-weight: 600; /* Semi-Bold */
+  color: var(--ui-primary);
+  line-height: 1.4;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
+  margin-bottom: 4rpx;
 }
 
-/* Title Highlight (Active) */
-.pc-title-hl {
-  color: var(--ui-primary); /* Active: Primary */
-  font-weight: var(--fw-medium, 500); /* 只有活跃时才用 Medium */
-}
-
-/* Meta Data Row */
 .pc-meta {
-  margin-top: 8rpx;
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 20rpx; /* Caption */
-  font-weight: 600; /* 降级：700 -> 600 (Meta 应该有存在感但不能太重) */
-  letter-spacing: 1.5rpx;
-  line-height: 1.2;
+  font-size: 20rpx;
+  color: var(--ui-secondary);
+  opacity: 0.6;
 }
 
-/* Meta: Source (Ticker) */
 .pc-meta-source {
-  color: var(--data-signal); /* Light: Black, Dark: Amber */
-  max-width: 260rpx;
+  max-width: 300rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .pc-meta-divider {
-  margin: 0 10rpx;
-  color: var(--data-secondary);
-  font-weight: 400;
+  margin: 0 8rpx;
 }
 
-.pc-meta-time {
-  color: var(--data-secondary);
-}
-
-/* Right Column: Status */
 .pc-right {
-  padding-top: 6rpx;
+  padding-top: 4rpx;
+  padding-left: 12rpx;
   flex-shrink: 0;
 }
 
@@ -153,17 +90,16 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 6rpx;
+  gap: 4rpx;
 }
 
 .pc-chip-icon {
   font-size: 20rpx;
-  color: var(--ui-action);
+  color: #ffb84d;
 }
 
 .pc-chip-count {
   font-size: 20rpx;
-  font-weight: 600; /* 降级：800 -> 600 */
-  letter-spacing: 1.5rpx;
-  color: var(--ui-action);
+  font-weight: 700;
+  color: #ffb84d;
 }

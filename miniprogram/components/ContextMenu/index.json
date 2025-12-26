@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "hero-icon": "/components/HeroIcon/index"
+  }
+}
+
+

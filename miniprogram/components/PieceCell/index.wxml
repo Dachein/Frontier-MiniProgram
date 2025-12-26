@@ -1,4 +1,8 @@
-<view class="pc {{item.isActive ? 'pc-active' : ''}}" bindtap="onTap">
+<view 
+  class="pc {{item.isActive ? 'pc-active' : ''}}" 
+  bindtap="onTap"
+  bindlongpress="onLongPress"
+>
   <view class="pc-left">
     <!-- Icon/Avatar: Rounded Square (iOS Style) -->
     <!-- Type-specific styling handled by CSS classes -->

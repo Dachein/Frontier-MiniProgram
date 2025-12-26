@@ -28,6 +28,9 @@ page {
   --ui-action:     var(--p-orange-burnt); 
   --ui-border:     var(--p-gray-light);
 
+  --data-signal:   var(--p-ink-black);
+  --data-secondary: var(--p-gray-std);
+
   /* 3. Content Layer (Markdown/内容专用) */
   --content-text:    #333333;
   --content-bold:    var(--ui-action);

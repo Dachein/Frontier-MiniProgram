@@ -1,0 +1,6 @@
+<view 
+  class="hero-icon" 
+  style="width: {{size}}rpx; height: {{size}}rpx; background-color: {{color}}; -webkit-mask-image: url({{svgDataUri}}); mask-image: url({{svgDataUri}}); -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;"
+></view>
+
+

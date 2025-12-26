@@ -1,24 +1,26 @@
 <view class="container">
-  <!-- Header: Minimal (No title as requested) -->
-  <view class="home-header">
-    <view class="ui-subtitle mono">{{tab === 'today' ? 'TODAY SIGNALS' : 'MY ARSENAL'}}</view>
-  </view>
-
-  <!-- Segmented Tabs -->
-  <view class="segmented" role="tablist">
-    <view
-      class="segmented-item {{tab === 'today' ? 'segmented-item-active' : ''}}"
-      bindtap="onTabTap"
-      data-tab="today"
-    >
-      Today
+  <!-- Header V2: Substack/Linear Style -->
+  <view class="header-v2">
+    <view class="header-left">
+      <text class="page-title">{{tab === 'today' ? 'Today' : 'Arsenal'}}</text>
     </view>
-    <view
-      class="segmented-item {{tab === 'my' ? 'segmented-item-active' : ''}}"
-      bindtap="onTabTap"
-      data-tab="my"
-    >
-      我的
+    <view class="header-right tabs">
+      <view
+        class="tab-pill {{tab === 'today' ? 'active' : ''}}"
+        bindtap="onTabTap"
+        data-tab="today"
+      >
+        <hero-icon name="bolt" size="32" wx:if="{{tab !== 'today'}}" color="#8E8E93" />
+        <text class="tab-text" wx:else>Today</text>
+      </view>
+      <view
+        class="tab-pill {{tab === 'my' ? 'active' : ''}}"
+        bindtap="onTabTap"
+        data-tab="my"
+      >
+        <hero-icon name="book-open" size="32" wx:if="{{tab !== 'my'}}" color="#8E8E93" />
+        <text class="tab-text" wx:else>Arsenal</text>
+      </view>
     </view>
   </view>
 
@@ -44,7 +46,11 @@
 
         <view class="surface surface-flat" wx:if="{{todayItems.length > 0}}">
           <view wx:for="{{todayItems}}" wx:key="id" class="list-row">
-            <piece-cell item="{{item}}" bind:select="onSelectPiece" />
+            <piece-cell 
+              item="{{item}}" 
+              bind:select="onSelectPiece" 
+              bind:contextmenu="onShowMenu"
+            />
             <view class="divider"></view>
           </view>
         </view>
@@ -84,7 +90,11 @@
           </view>
 
           <view wx:for="{{myItems}}" wx:key="id" class="list-row">
-            <piece-cell item="{{item}}" bind:select="onSelectPiece" />
+            <piece-cell 
+              item="{{item}}" 
+              bind:select="onSelectPiece" 
+              bind:contextmenu="onShowMenu"
+            />
             <view class="divider"></view>
           </view>
         </view>
@@ -161,4 +171,13 @@
       <view class="safe-area-bottom"></view>
     </view>
   </page-container>
+
+  <!-- Context Menu -->
+  <context-menu
+    show="{{showMenu}}"
+    title="{{menuTitle}}"
+    items="{{menuItems}}"
+    bind:close="onCloseMenu"
+    bind:select="onMenuAction"
+  />
 </view>

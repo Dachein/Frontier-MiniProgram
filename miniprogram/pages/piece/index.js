@@ -1,4 +1,5 @@
 const PieceService = require('../../services/piece')
+const { request } = require('../../utils/api')
 const md = require('../../utils/md.js')
 
 // Markdown 标签样式配置 - 全量 Token 化
@@ -216,7 +217,41 @@ Page({
     this.startStream()
   },
 
+  async handleSaveImage() {
+    if (!this.data.id) return
+    
+    wx.showLoading({ title: 'Generating...', mask: true })
+    try {
+      const resp = await request('GET', `/pieces/${this.data.id}/share-image`)
+      if (!resp || !resp.success || !resp.image_url) {
+        throw new Error(resp?.error || 'Failed to generate image')
+      }
+
+      // 预览图片
+      wx.previewImage({
+        urls: [resp.image_url],
+        current: resp.image_url
+      })
+    } catch (e) {
+      wx.showToast({ title: e.message || 'Error', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+    }
+  },
+
   onUnload() {
     this._stopPacing()
+  },
+
+  /**
+   * 转发给朋友/群聊
+   */
+  onShareAppMessage() {
+    const { piece, title } = this.data
+    return {
+      title: title || 'metaAlpha Signal',
+      path: `/pages/piece/index?id=${encodeURIComponent(this.data.id)}`,
+      imageUrl: '' // 可以留空，默认截取当前页面，或者后续放我们的 Logo
+    }
   }
 })

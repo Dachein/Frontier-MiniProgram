@@ -1,10 +1,8 @@
 {
-  "navigationBarTitleText": "Library",
-  "enablePullDownRefresh": true,
   "usingComponents": {
-    "piece-cell": "/components/PieceCell/index"
-  }
+    "piece-cell": "/components/PieceCell/index",
+    "context-menu": "/components/ContextMenu/index",
+    "hero-icon": "/components/HeroIcon/index"
+  },
+  "navigationStyle": "custom"
 }
-
-
-

@@ -66,9 +66,11 @@
       <text class="mono">Generating...</text>
     </view>
     
-    <!-- Test Action -->
+    <!-- Actions Area -->
     <view class="footer-actions" wx:if="{{hasTakeaways && !streaming}}">
-      <button class="btn-regenerate" bindtap="handleRegenerate">Regenerate</button>
+      <button class="btn-secondary" bindtap="handleRegenerate">Regenerate</button>
+      <button class="btn-primary" open-type="share">Forward</button>
+      <button class="btn-primary" bindtap="handleSaveImage" style="background-color: var(--p-ink-black);">Save Image</button>
     </view>
   </view>
 

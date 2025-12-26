@@ -1,0 +1,32 @@
+<view class="menu-overlay {{show ? 'show' : ''}}" bindtap="onClose" catchtouchmove="true">
+  <view class="menu-container {{show ? 'animate-in' : ''}}" catchtap="true">
+    <view class="menu-header" wx:if="{{title}}">
+      <text class="menu-title">{{title}}</text>
+    </view>
+    <view class="menu-list">
+      <view 
+        class="menu-item {{item.danger ? 'danger' : ''}}" 
+        wx:for="{{items}}" 
+        wx:key="id" 
+        bindtap="onSelect" 
+        data-id="{{item.id}}"
+        hover-class="menu-item-hover"
+      >
+        <button 
+          wx:if="{{item.openType === 'share'}}" 
+          open-type="share" 
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; z-index: 1; padding: 0; margin: 0;"
+        ></button>
+        <view class="menu-item-inner">
+          <text class="menu-item-text">{{item.label}}</text>
+          <view class="menu-item-icon" wx:if="{{item.icon}}">
+            <hero-icon name="{{item.icon}}" size="36" color="{{item.danger ? '#ff4d4f' : 'currentColor'}}" strokeWidth="2" />
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="menu-cancel" bindtap="onClose">
+      <text>Cancel</text>
+    </view>
+  </view>
+</view>
