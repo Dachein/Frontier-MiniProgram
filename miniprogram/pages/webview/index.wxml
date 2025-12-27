@@ -1,21 +1,21 @@
 <view class="container">
   <web-view src="{{url}}" bindmessage="handleMessage"></web-view>
   
-  <!-- 4. Style Picker (Native Overlay) -->
-  <view class="style-picker">
-    <view class="styles-row">
-      <view wx:for="{{styles}}" wx:key="id" 
+  <!-- 4. Style Picker (Native Overlay using cover-view for Webview support) -->
+  <cover-view class="style-picker">
+    <cover-view class="styles-row">
+      <cover-view wx:for="{{styles}}" wx:key="id" 
             class="style-item {{currentStyle === item.id ? 'active' : ''}}" 
             bindtap="switchStyle" data-style="{{item.id}}"
             style="background-color: {{item.color}}">
-        <text class="style-abbr">{{item.abbr}}</text>
-      </view>
-    </view>
+        <cover-view class="style-abbr" style="color: {{item.id === 'terminal' ? '#F19928' : (item.id === 'parchment' ? '#8B0000' : (item.id === 'neon' ? '#000' : '#C2410C'))}}">{{item.abbr}}</cover-view>
+      </cover-view>
+    </cover-view>
     
-    <view class="actions-row">
+    <cover-view class="actions-row">
       <button class="btn-save" bindtap="handleSave" loading="{{isGenerating}}">SAVE IMAGE</button>
       <button class="btn-forward" bindtap="handleForward">FORWARD</button>
-    </view>
-  </view>
+    </cover-view>
+  </cover-view>
 </view>
 

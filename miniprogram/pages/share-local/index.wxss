@@ -1,0 +1,201 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.4s ease;
+}
+
+.container.terminal { background-color: #141414; }
+.container.parchment { background-color: #F5F1E8; }
+.container.neon { background-color: #FFFFFF; }
+.container.pearl { background-color: #F8F9FA; }
+
+/* 1. 顶部指示器 */
+.style-tabs {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 20rpx);
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16rpx;
+  z-index: 1000;
+  height: 80rpx;
+}
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 8rpx 16rpx;
+  transition: all 0.3s ease;
+}
+
+.tab-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.1);
+}
+
+.terminal .tab-dot { background: rgba(255,255,255,0.2); }
+
+.tab-item.active {
+  background: rgba(0,0,0,0.05);
+  border-radius: 30rpx;
+}
+
+.terminal .tab-item.active { background: rgba(255,255,255,0.1); }
+
+.tab-text {
+  font-size: 20rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+  font-family: monospace;
+}
+
+.terminal .tab-item.active { color: #F19928; }
+.parchment .tab-item.active { color: #8B0000; }
+.neon .tab-item.active { color: #000; }
+.pearl .tab-item.active { color: #C2410C; }
+
+/* 2. 全屏 Swiper */
+.style-swiper {
+  width: 100vw;
+  height: 100vh;
+}
+
+.preview-scroll {
+  width: 100%;
+  height: 100%;
+}
+
+.image-container {
+  width: 100vw;
+  display: block;
+}
+
+.preview-image {
+  width: 100vw !important;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30rpx;
+}
+
+/* 3. 悬浮工具栏 */
+.floating-toolbar {
+  position: fixed;
+  bottom: calc(60rpx + env(safe-area-inset-bottom));
+  left: 40rpx;
+  right: 40rpx;
+  z-index: 2000;
+  
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 100rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0,0,0,0.15);
+  border: 1rpx solid rgba(255,255,255,0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .floating-toolbar {
+    background: rgba(45, 45, 45, 0.95);
+    border: 1rpx solid rgba(255,255,255,0.1);
+  }
+}
+
+.tool-btn, .tool-btn-native {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  background: transparent;
+  padding: 10rpx 0;
+  line-height: 1;
+  border: none;
+  margin: 0;
+}
+
+.tool-btn-native::after { border: none; }
+
+/* 核心：复用前一页被验证过的 Data URI */
+.btn-icon {
+  width: 44rpx;
+  height: 44rpx;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.icon-moments {
+  background-image: url("data:image/svg+xml,%3Csvg t='1766799462100' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M541.76 311.637L283.947 54.72c-9.856 4.907-19.542 10.048-28.971 15.51-37.973 21.738-73.75 48.597-106.07 80.789-13.973 13.845-26.666 28.373-38.506 43.221-29.12 36.523-52.523 76.096-70.165 117.483 0 0 485.973-2.56 501.525-0.086zM391.723 348.16H27.093c-3.52 10.197-6.634 20.715-9.536 31.296C6.187 421.504 0 465.686 0 511.36c0 19.52 1.216 38.741 3.435 57.643 5.248 46.378 16.853 90.773 33.813 132.416 0 0 341.717-344.171 354.475-353.259zM970.24 282.432c-4.843-9.664-10.005-19.328-15.488-28.821-21.888-37.718-48.768-73.408-81.173-105.622-13.846-13.781-28.374-26.56-43.35-38.378-36.672-28.992-76.33-52.331-117.866-69.867 0 0 2.581 484.139 0 499.563L970.24 282.432zM676.565 390.336V27.072c-10.304-3.477-20.864-6.656-31.445-9.6C602.965 6.208 558.592 0 512.725 0c-19.605 0-38.869 1.216-57.877 3.413-46.485 5.248-91.05 16.854-132.97 33.643 0 0 345.407 340.608 354.687 353.28zM311.147 482.09L53.419 739.009c4.778 9.835 10.048 19.37 15.488 28.885 21.781 37.782 48.746 73.472 81.173 105.707 13.824 13.803 28.373 26.475 43.35 38.379 36.671 29.056 76.245 52.288 117.866 69.802 0-0.021-2.645-484.16-0.15-499.69zM479.744 714.283L737.621 971.2a612.547 612.547 0 0 0 28.992-15.51c37.782-21.695 73.536-48.49 106.006-80.831 13.781-13.76 26.538-28.203 38.485-43.158 29.056-36.544 52.523-75.989 70.101-117.461-0.042 0-485.888 2.645-501.461 0.043zM1020.544 455.19c-5.312-46.315-16.832-90.753-33.77-132.46 0 0-341.782 344.15-354.56 353.345h364.629a553.476 553.476 0 0 0 9.493-31.339c11.435-42.09 17.664-86.144 17.664-131.84 0-19.541-1.259-38.784-3.456-57.707zM347.456 633.6v363.307c10.347 3.498 20.864 6.656 31.424 9.493 42.219 11.456 86.528 17.6 132.395 17.6 19.541 0 38.848-1.216 57.77-3.435 46.55-5.269 91.051-16.725 132.907-33.6 0.064 0-345.301-340.565-354.496-353.365z' fill='%23666666'/%3E%3C/svg%3E");
+}
+
+.icon-forward {
+  background-image: url("data:image/svg+xml,%3Csvg t='1766799525102' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M319.67 390.21c0.16 18.8 15.54 33.9 34.35 33.76 18.8-0.16 33.9-15.54 33.76-34.35-0.16-18.7-15.36-33.76-34.05-33.76-18.9 0.08-34.13 15.46-34.05 34.35zM468.17 389.2c0 12.2 6.44 23.48 16.95 29.67a33.92 33.92 0 0 0 34.05 0c16.43-9.67 21.9-30.82 12.24-47.26a34.48 34.48 0 0 0-12.24-12.24 33.92 33.92 0 0 0-34.05 0 34.42 34.42 0 0 0-16.95 29.67v0.16zM551.48 539.1c0.1 13 10.8 23.55 23.86 23.43 13-0.1 23.55-10.8 23.43-23.86-0.1-13-10.67-23.44-23.64-23.44-13.1 0.06-23.7 10.74-23.65 23.86z' fill='%23666666'/%3E%3Cpath d='M669.44 535.69c0 12.75 10.32 23.1 23.07 23.1s23.1-10.3 23.1-23.1c0-12.75-10.3-23.1-23.07-23.1-4 0-8 1.05-11.57 3a23.1 23.1 0 0 0-11.54 20z' fill='%23666666'/%3E%3Cpath d='M511.45 4.05C231.1 3.74 3.57 230.77 3.26 511.13v0.57c0 280.36 227.27 507.63 507.63 507.63h0.54c280.36 0.3 507.88-226.7 508.18-507.08v-0.54C1019.6 231.35 792.35 4.06 511.99 4.05h-0.57z m-86.89 624.85a349.5 349.5 0 0 1-74.84-11l-74.84 36.9 21.2-63.68c-53.6-36.9-85-84.9-85-144 0-101.5 96-180.9 213.43-180.9 104.4 0 196.8 63.68 215.28 149.52-6.74-0.77-13.54-1-20.3-0.93-101.7 0-181.1 75.7-181.1 168.9 0 15 2.37 30 6.46 44.3-7.4 0-13.85 0.9-20.3 0.9l0.04 0.03z m312.34 74.76l15.7 53.53-58.2-32.29c-20.7 6.37-42.13 10-63.76 11-101.7 0-181.1-69.2-181.1-154.14s79.46-154.14 181.1-154.14 181.1 69.2 181.1 154.14c0 47-31.4 89.5-74.84 121.8h0.01z' fill='%23666666'/%3E%3C/svg%3E");
+}
+
+.icon-save-image {
+  background-image: url("data:image/svg+xml,%3Csvg t='1766799825823' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M793.6 739.84c0 12.8-10.24 20.48-23.04 20.48H250.88c-12.8 0-20.48-10.24-20.48-20.48V284.16c0-12.8 10.24-20.48 20.48-20.48h522.24c12.8 0 23.04 10.24 23.04 20.48L793.6 739.84zM512 0C230.4 0 0 230.4 0 512s230.4 512 512 512 512-230.4 512-512S793.6 0 512 0z' fill='%23666666'/%3E%3Cpath d='M404.48 529.92l66.56 92.16 128-181.76 130.56 243.2h-435.2l110.08-153.6z m0-148.48c23.04 0 43.52 20.48 43.52 43.52 0 23.04-20.48 43.52-43.52 43.52-23.04 0-43.52-20.48-43.52-43.52 0-23.04 17.92-43.52 43.52-43.52z m-130.56 337.92h478.72V304.64H273.92v414.72z' fill='%23666666'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  .btn-icon { filter: invert(0.9); }
+}
+
+.tool-btn text, .tool-btn-native text {
+  font-size: 18rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tool-btn text, .tool-btn-native text { color: #eee; }
+}
+
+.divider {
+  width: 1rpx;
+  height: 48rpx;
+  background: rgba(0,0,0,0.08);
+}
+
+.highlight text { color: #007AFF !important; }
+.terminal .highlight text { color: #F19928 !important; }
+.parchment .highlight text { color: #8B0000 !important; }
+
+/* 离屏盒 */
+.offscreen-box {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  visibility: hidden;
+}
+
+/* Spinner */
+.spinner {
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid rgba(0,0,0,0.1);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

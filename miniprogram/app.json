@@ -6,7 +6,8 @@
     "pages/library/index",
     "pages/add/index",
     "pages/piece/index",
-    "pages/webview/index"
+    "pages/webview/index",
+    "pages/share-local/index"
   ],
   "window": {
     "navigationBarTitleText": "metaAlpha",

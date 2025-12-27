@@ -41,14 +41,14 @@ Page({
   // ⏲️ 停留检测计时器
   _scrollTimer: null,
 
-  // 💓 掌控节奏的内部状态
-  _internal: {
-    fullTakeaways: [],   // 服务器推送回来的全量最新快照
-    pacingTimer: null,   // 掌控节奏的定时器
-    isStreamComplete: false
-  },
-
   async onLoad(query) {
+    // 💓 掌控节奏的内部状态 - 移出 data 以避免深拷贝警告
+    this._internal = {
+      fullTakeaways: [],   // 服务器推送回来的全量最新快照
+      pacingTimer: null,   // 掌控节奏的定时器
+      isStreamComplete: false
+    }
+
     const id = query.id
     this.setData({ id })
     await this.load()
@@ -298,10 +298,9 @@ Page({
 
   handleSaveImage() {
     if (!this.data.id) return
-    // 进入特定的 WebView 页面进行风格选择和预览
-    const url = `https://v2.mindtalk-share.pages.dev/piece/${this.data.id}?mode=share-image`
+    // 🚀 开启本地原生渲染试验田，彻底告别 Webview 空白
     wx.navigateTo({
-      url: `/pages/webview/index?url=${encodeURIComponent(url)}&title=Share Image`
+      url: `/pages/share-local/index?id=${this.data.id}`
     })
   },
 
