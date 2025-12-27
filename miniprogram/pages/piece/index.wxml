@@ -65,12 +65,40 @@
       <view class="dot-pulse"></view>
       <text class="mono">Generating...</text>
     </view>
+  </view>
+
+  <!-- 3. Floating Action Bar (5 Actions) -->
+  <view class="action-bar {{showActionBar ? 'show' : ''}}" wx:if="{{hasTakeaways && !streaming}}">
+    <!-- 1. 朋友圈 -->
+    <view class="action-item" bindtap="handleMoments">
+      <view class="action-icon moments-icon"></view>
+      <text class="action-label">朋友圈</text>
+    </view>
     
-    <!-- Actions Area -->
-    <view class="footer-actions" wx:if="{{hasTakeaways && !streaming}}">
-      <button class="btn-secondary" bindtap="handleRegenerate">Regenerate</button>
-      <button class="btn-primary" open-type="share">Forward</button>
-      <button class="btn-primary" bindtap="handleSaveImage" style="background-color: var(--p-ink-black);">Save Image</button>
+    <!-- 2. 好友/群 -->
+    <view class="action-item">
+      <button class="share-btn" open-type="share">
+        <view class="action-icon forward-icon"></view>
+        <text class="action-label">好友/群</text>
+      </button>
+    </view>
+    
+    <!-- 3. 复制链接 -->
+    <view class="action-item" bindtap="handleCopyLink">
+      <view class="action-icon link-icon"></view>
+      <text class="action-label">复制链接</text>
+    </view>
+    
+    <!-- 4. 存为图片 -->
+    <view class="action-item" bindtap="handleSaveImage">
+      <view class="action-icon image-icon"></view>
+      <text class="action-label">存为图片</text>
+    </view>
+
+    <!-- 5. 更多 (原重新生成) -->
+    <view class="action-item" bindtap="handleMore">
+      <view class="action-icon more-icon"></view>
+      <text class="action-label">更多</text>
     </view>
   </view>
 

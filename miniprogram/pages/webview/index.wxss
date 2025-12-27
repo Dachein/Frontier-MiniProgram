@@ -1,0 +1,82 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* 覆盖在 Webview 之上的原生组件 */
+.style-picker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  padding: 40rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+  z-index: 999;
+}
+
+.styles-row {
+  display: flex;
+  justify-content: center;
+  gap: 24rpx;
+}
+
+.style-item {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.style-item.active {
+  transform: scale(1.1);
+  border-color: #fff;
+  box-shadow: 0 0 20rpx rgba(255, 255, 255, 0.5);
+}
+
+.style-abbr {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #666; /* 默认深色，实际根据背景调整更好 */
+}
+
+.style-item[data-style="terminal"] .style-abbr { color: #F19928; }
+.style-item[data-style="parchment"] .style-abbr { color: #8B0000; }
+.style-item[data-style="neon"] .style-abbr { color: #000; }
+.style-item[data-style="pearl"] .style-abbr { color: #C2410C; }
+
+.actions-row {
+  display: flex;
+  gap: 20rpx;
+}
+
+.btn-save, .btn-forward {
+  flex: 1;
+  height: 100rpx;
+  border-radius: 50rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.btn-save {
+  background: #fff;
+  color: #000;
+}
+
+.btn-forward {
+  background: #000;
+  color: #fff;
+}
+

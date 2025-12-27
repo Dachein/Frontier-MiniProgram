@@ -31,8 +31,15 @@ Page({
     error: '',
     
     // Styles
-    markdownStyle: MARKDOWN_STYLE
+    markdownStyle: MARKDOWN_STYLE,
+    
+    // UI Interaction
+    showActionBar: false,
+    lastScrollTop: 0
   },
+
+  // ⏲️ 停留检测计时器
+  _scrollTimer: null,
 
   // 💓 掌控节奏的内部状态
   _internal: {
@@ -212,31 +219,90 @@ Page({
     }
   },
 
-  handleRegenerate() {
-    this.setData({ takeaways: [], hasTakeaways: false })
-    this.startStream()
+  onPageScroll(e) {
+    const { scrollTop } = e
+    const { lastScrollTop, showActionBar } = this.data
+    
+    // 清除之前的停留计时器
+    if (this._scrollTimer) clearTimeout(this._scrollTimer)
+
+    // 1. 滚动方向判断
+    if (scrollTop > lastScrollTop && scrollTop > 50) {
+      // 往下滚 (看新内容) -> 隐藏
+      if (showActionBar) this.setData({ showActionBar: false })
+    } 
+    else if (scrollTop < lastScrollTop) {
+      // 往上滚 (往回看) -> 显示
+      if (!showActionBar) this.setData({ showActionBar: true })
+    }
+    
+    // 2. 停留检测：如果停留 1.5 秒，自动显示操作条
+    this._scrollTimer = setTimeout(() => {
+      if (!this.data.showActionBar) {
+        this.setData({ showActionBar: true })
+      }
+    }, 1500)
+
+    this.setData({ lastScrollTop: scrollTop })
   },
 
-  async handleSaveImage() {
-    if (!this.data.id) return
-    
-    wx.showLoading({ title: 'Generating...', mask: true })
-    try {
-      const resp = await request('GET', `/pieces/${this.data.id}/share-image`)
-      if (!resp || !resp.success || !resp.image_url) {
-        throw new Error(resp?.error || 'Failed to generate image')
+  handleMore() {
+    const itemList = ['重新生成 (AI Brief)', '复制文字总结']
+    wx.showActionSheet({
+      itemList,
+      itemColor: '#666666',
+      success: (res) => {
+        if (res.tapIndex === 0) {
+          // 重新生成
+          this.setData({ takeaways: [], hasTakeaways: false })
+          this.startStream()
+        } else if (res.tapIndex === 1) {
+          // 复制总结
+          this.handleCopySummary()
+        }
       }
+    })
+  },
 
-      // 预览图片
-      wx.previewImage({
-        urls: [resp.image_url],
-        current: resp.image_url
-      })
-    } catch (e) {
-      wx.showToast({ title: e.message || 'Error', icon: 'none' })
-    } finally {
-      wx.hideLoading()
-    }
+  handleCopySummary() {
+    const { takeaways, title } = this.data
+    if (!takeaways || takeaways.length === 0) return
+
+    const summaryText = takeaways.map((item, idx) => {
+      return `${idx + 1}. ${item.question}\n${item.answer}`
+    }).join('\n\n')
+
+    const fullText = `【${title}】\n\nAI Brief:\n${summaryText}\n\n—— 来自 metaAlpha`
+
+    wx.setClipboardData({
+      data: fullText,
+      success: () => {
+        wx.showToast({ title: '文字总结已复制', icon: 'success' })
+      }
+    })
+  },
+
+  handleCopyLink() {
+    const url = `https://v2.mindtalk-share.pages.dev/piece/${this.data.id}`
+    wx.setClipboardData({
+      data: url,
+      success: () => {
+        wx.showToast({ title: 'Link Copied', icon: 'success' })
+      }
+    })
+  },
+
+  handleMoments() {
+    wx.showToast({ title: 'Please use system share for Moments', icon: 'none' })
+  },
+
+  handleSaveImage() {
+    if (!this.data.id) return
+    // 进入特定的 WebView 页面进行风格选择和预览
+    const url = `https://v2.mindtalk-share.pages.dev/piece/${this.data.id}?mode=share-image`
+    wx.navigateTo({
+      url: `/pages/webview/index?url=${encodeURIComponent(url)}&title=Share Image`
+    })
   },
 
   onUnload() {
@@ -252,6 +318,17 @@ Page({
       title: title || 'metaAlpha Signal',
       path: `/pages/piece/index?id=${encodeURIComponent(this.data.id)}`,
       imageUrl: '' // 可以留空，默认截取当前页面，或者后续放我们的 Logo
+    }
+  },
+
+  /**
+   * 分享到朋友圈
+   */
+  onShareTimeline() {
+    const { title } = this.data
+    return {
+      title: title || 'metaAlpha Signal',
+      query: `id=${this.data.id}`
     }
   }
 })
